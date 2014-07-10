@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyWcfDuplexExample.Client
 {
-    class ICallback : IMyServiceCallback
+    class Callback : IMyServiceCallback
     {
         public void WorkComplete()
         {

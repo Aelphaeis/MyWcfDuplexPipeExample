@@ -19,7 +19,7 @@ namespace MyWcfDuplexExample.Client
 
         static void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            using (MyServiceClient service = new MyServiceClient(new ICallback()))
+            using (MyServiceClient service = new MyServiceClient(new Callback()))
                 service.DoWork();
         }
     }
