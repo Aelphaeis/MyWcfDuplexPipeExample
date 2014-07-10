@@ -6,14 +6,26 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 namespace MyWcfDuplexExample
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class MyService : IMyService
     {
+        public List<IMyServiceCallback> Callbacks { get; private set; }
+
+        public MyService(){
+            Callbacks = new List<IMyServiceCallback>();
+        }
+
+        public void Init()
+        {
+            Callbacks.Add(Callback);
+        }
+
         public void DoWork()
         {
             Console.WriteLine("Hello World");
             Callback.WorkComplete();
         }
+
 
         IMyServiceCallback Callback
         {

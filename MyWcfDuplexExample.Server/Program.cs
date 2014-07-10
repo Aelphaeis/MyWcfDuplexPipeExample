@@ -12,9 +12,18 @@ namespace MyWcfDuplexExample.Server
         {
             using(MyServiceServer server = new MyServiceServer())
             {
+                int i = -1;
                 server.Open();
-                Console.WriteLine("Press Enter To Exit");
-                Console.ReadLine();
+                Console.WriteLine("0 To Exit | Num > 0 to send message");
+
+                do
+                {
+                    if (Int32.TryParse(Console.ReadLine(), out i))
+                        if (i > 0)
+                            server.Msg(i);
+
+                } while (i != 0);
+
                 server.Close();
             }
         }

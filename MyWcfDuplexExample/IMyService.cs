@@ -11,5 +11,8 @@ namespace MyWcfDuplexExample
     {
         [OperationContract(IsOneWay=true)]
         void DoWork();
+
+        [OperationContract(IsOneWay = true)]
+        void Init();
     }
 }

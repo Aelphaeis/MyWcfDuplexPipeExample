@@ -10,18 +10,25 @@ namespace MyWcfDuplexExample
     {
         public Boolean IsDisposed { get; private set; }
         ServiceHost host { get; set; }
-
-
+        MyService service;
         public void Open()
         {
             if (host != null)
                 Dispose();
 
             IsDisposed = false;
-            host = new ServiceHost(typeof(MyService), new Uri(Constants.myPipeService));
+            service = new MyService();
+            host = new ServiceHost(service, new Uri(Constants.myPipeService));
             host.AddServiceEndpoint(typeof(IMyService), new NetNamedPipeBinding(), Constants.myPipeServiceName);
 
             host.BeginOpen(OnOpen, host);
+        }
+
+        public void Msg(int ClientId)
+        {
+            foreach (var cb in service.Callbacks)
+                if (cb.GetClientId() == ClientId)
+                    cb.RecieveMessage("We have called you choosen one");
         }
 
         public void Close()

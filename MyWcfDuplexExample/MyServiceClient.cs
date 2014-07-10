@@ -18,6 +18,11 @@ namespace MyWcfDuplexExample
             EndpointAddress endpointAddress = new EndpointAddress(Constants.myPipeService + @"/" + Constants.myPipeServiceName);
 
             myServiceFactory = new DuplexChannelFactory<IMyService>(site, binding, endpointAddress);
+            Init();
+        }
+        public void Init()
+        {
+            myServiceFactory.CreateChannel().Init();
         }
 
         public void DoWork()
