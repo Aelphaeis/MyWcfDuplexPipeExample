@@ -8,19 +8,19 @@ namespace MyWcfDuplexExample
 {
     public class MyServiceServer : IDisposable
     {
-        public Boolean IsDisposed { get; private set; }
+        Boolean disposed;
         ServiceHost host { get; set; }
         MyService service;
-        public void Open()
-        {
-            if (host != null)
-                Dispose();
 
-            IsDisposed = false;
+        public MyServiceServer()
+        {
+            disposed = false;
             service = new MyService();
             host = new ServiceHost(service, new Uri(Constants.myPipeService));
             host.AddServiceEndpoint(typeof(IMyService), new NetNamedPipeBinding(), Constants.myPipeServiceName);
-
+        }
+        public void Open()
+        {
             host.BeginOpen(OnOpen, host);
         }
 
@@ -31,16 +31,20 @@ namespace MyWcfDuplexExample
                     cb.RecieveMessage("We have called you choosen one");
         }
 
-        public void Close()
+        protected virtual void Dispose(Boolean disposing)
         {
-            host.BeginClose(OnClose, host);
+            if (disposed)
+                return;
+            if(disposing)
+                host.Close();
+
+            disposed = true;
         }
 
         public void Dispose()
         {
-            ((IDisposable)host).Dispose();
-            IsDisposed = true;
-            host = null;
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         void OnOpen(IAsyncResult ar)
@@ -53,6 +57,11 @@ namespace MyWcfDuplexExample
             ServiceHost service = (ServiceHost)ar.AsyncState;
             service.EndClose(ar);
             Dispose();
+        }
+
+        ~MyServiceServer()
+        {
+            Dispose(false);
         }
     }
 }

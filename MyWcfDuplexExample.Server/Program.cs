@@ -23,8 +23,6 @@ namespace MyWcfDuplexExample.Server
                             server.Msg(i);
 
                 } while (i != 0);
-
-                server.Close();
             }
         }
     }
